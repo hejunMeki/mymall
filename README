@@ -1,0 +1,10 @@
+1、关于配置文件dispatcher-servlet.xml  它是对应的springMVC的配置文件
+本程序中采用了默认的名字   即dispatcher-servlet.xml  同时放入默认的位置即WEB-INF下面
+    因此程序启动时会自动在该位置下去加载该配置
+    如果要自定义配置文件的名字以及存放的位置
+    那么可以通过下面的配置指定实现
+    <param-name>contextConfigLocation</param-name>
+    <param-value>classpath:applicationContext.xml（路径名自定义）</param-value>
+2、applicationContext.xml是spring的主要配置文件
+3、applicationContext-database.xml这是spring的相关引用文件
+
