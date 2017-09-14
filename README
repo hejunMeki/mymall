@@ -7,4 +7,11 @@
     <param-value>classpath:applicationContext.xml（路径名自定义）</param-value>
 2、applicationContext.xml是spring的主要配置文件
 3、applicationContext-database.xml这是spring的相关引用文件
+注解：
+    @Autowired   自动装配
+    @Param       设定参数名
+    @ResponseBody 将返回的信息打包为JSON数据
+    @RequestMapping(value = "login",method = RequestMethod.POST) 指定路径 指定上传方法
+     @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL) json序列化时空的key不返回
+
 

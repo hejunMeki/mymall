@@ -151,4 +151,16 @@
       update_time =now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--以下为自己添加-->
+  <!--查询用户名是否存在-->
+  <select id="checkUsername" parameterType="string" resultType="int">
+    select count(1) from mmall_user where username=#{username}
+  </select>
+  <!--用户登录 map传入多个参数-->
+  <select id="login" parameterType="map" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List" />
+    from mmall_user where username=#{username} and password=#{password}
+  </select>
+  <!---->
 </mapper>
