@@ -31,7 +31,7 @@
     delete from mmall_shipping
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.mymall.pojo.Shipping" >
+  <insert id="insert" parameterType="com.mymall.pojo.Shipping" useGeneratedKeys="true" keyProperty="id">
     insert into mmall_shipping (id, user_id, receiver_name, 
       receiver_phone, receiver_mobile, receiver_province, 
       receiver_city, receiver_district, receiver_address, 
@@ -122,6 +122,7 @@
       </if>
     </trim>
   </insert>
+  <!--id不能修改-->
   <update id="updateByPrimaryKeySelective" parameterType="com.mymall.pojo.Shipping" >
     update mmall_shipping
     <set >
@@ -176,4 +177,45 @@
       update_time =now()
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+
+
+  <!--根据地址id和用户id删除地址-->
+  <delete id="delShippingById" parameterType="map">
+    delete from mmall_shipping
+    where id=#{shippingId}
+    and user_id=#{userId}
+  </delete>
+
+  <!--绑定用户id修改地址-->
+  <update id="updateByPrimaryId" parameterType="com.mymall.pojo.Shipping" >
+    update mmall_shipping
+    set
+    receiver_name = #{receiverName,jdbcType=VARCHAR},
+    receiver_phone = #{receiverPhone,jdbcType=VARCHAR},
+    receiver_mobile = #{receiverMobile,jdbcType=VARCHAR},
+    receiver_province = #{receiverProvince,jdbcType=VARCHAR},
+    receiver_city = #{receiverCity,jdbcType=VARCHAR},
+    receiver_district = #{receiverDistrict,jdbcType=VARCHAR},
+    receiver_address = #{receiverAddress,jdbcType=VARCHAR},
+    receiver_zip = #{receiverZip,jdbcType=VARCHAR},
+    update_time =now()
+    where id = #{id,jdbcType=INTEGER}
+    and user_id = #{userId,jdbcType=INTEGER}
+  </update>
+
+  <!--绑定用户id查找地址信息-->
+  <select id="selectShippingById" parameterType="map" resultMap="BaseResultMap">
+      SELECT <include refid="Base_Column_List"/>
+    from mmall_shipping
+    where id=#{shippingId}
+    and user_id=#{userId}
+  </select>
+
+  <!--根据用户id查询所有地址-->
+  <select id="selectListByUserId" parameterType="Integer" resultMap="BaseResultMap">
+    SELECT <include refid="Base_Column_List"/>
+    from mmall_shipping
+    where user_id=#{userId}
+  </select>
 </mapper>

@@ -4,25 +4,25 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product {
-    private Integer id;
+    private Integer id;   //商品的id
 
-    private Integer categoryId;
+    private Integer categoryId;  //分类id
 
-    private String name;
+    private String name;    //商品名
 
-    private String subtitle;
+    private String subtitle;   //商品副标题
 
-    private String mainImage;
+    private String mainImage;       //产品主图,url相对地址
 
-    private String subImages;
+    private String subImages;      //图片地址,json格式,扩展用
 
-    private String detail;
+    private String detail;      //商品详情
 
-    private BigDecimal price;
+    private BigDecimal price;    //价格
 
-    private Integer stock;
+    private Integer stock;     //库存数量
 
-    private Integer status;
+    private Integer status;     //状态
 
     private Date createTime;
 

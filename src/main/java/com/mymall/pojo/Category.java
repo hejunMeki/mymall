@@ -3,18 +3,19 @@ package com.mymall.pojo;
 import java.util.Date;
 
 public class Category {
+    //类别Id
     private Integer id;
-
+    //父类别id当id=0时说明是根节点,一级类别
     private Integer parentId;
-
+    //类别名称
     private String name;
-
+    //类别状态1-正常,2-已废弃
     private Boolean status;
-
+    //排序编号,同类展示顺序,数值相等则自然排序
     private Integer sortOrder;
-
+    //
     private Date createTime;
-
+    //
     private Date updateTime;
 
     public Category(Integer id, Integer parentId, String name, Boolean status, Integer sortOrder, Date createTime, Date updateTime) {
@@ -85,5 +86,20 @@ public class Category {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+
+        return id != null ? id.equals(category.id) : category.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

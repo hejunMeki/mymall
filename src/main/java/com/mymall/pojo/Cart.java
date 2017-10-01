@@ -3,14 +3,15 @@ package com.mymall.pojo;
 import java.util.Date;
 
 public class Cart {
+
     private Integer id;
 
     private Integer userId;
-
+    //商品id
     private Integer productId;
-
+    //数量
     private Integer quantity;
-
+    //是否选择,1=已勾选,0=未勾选
     private Integer checked;
 
     private Date createTime;

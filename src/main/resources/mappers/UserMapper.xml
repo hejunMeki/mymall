@@ -162,5 +162,44 @@
     select <include refid="Base_Column_List" />
     from mmall_user where username=#{username} and password=#{password}
   </select>
-  <!---->
+  <!--检查用户名是否存在-->
+  <select id="check_username" parameterType="string" resultType="int">
+    select count(1) from mmall_user
+    where username=#{username}
+  </select>
+  <!--检查邮箱是否存在-->
+  <select id="check_email" parameterType="string" resultType="int">
+    select count(1) from mmall_user
+    where email=#{email}
+  </select>
+  <!--根据用户名查询密保问题-->
+  <select id="SltQuesByUsername" parameterType="string" resultType="string">
+    select question from mmall_user
+    where username=#{username}
+  </select>
+  <!--检查密保问题的答案-->
+  <select id="checkQuestionAnswer" parameterType="map" resultType="int">
+    select count(1) from mmall_user
+    where username=#{username} and question=#{question}
+    and answer=#{answer}
+  </select>
+  <!--未登录状态修改密码-->
+  <update id="updatePassword" parameterType="map">
+    update mmall_user
+    set password=#{passwordNew},update_time =now()
+    where username=#{username}
+  </update>
+  <!--根据用户id和密码检查密码-->
+  <select id="checkPassword" parameterType="map" resultType="int">
+    select count(1) from mmall_user
+    where id=#{id}
+    and password=#{password}
+  </select>
+  <!--登录状态的邮箱查重-->
+  <select id="checkEmail" parameterType="map" resultType="int">
+    select count(1) from mmall_user
+    where email=#{email}
+    and id!=#{id}
+  </select>
+
 </mapper>

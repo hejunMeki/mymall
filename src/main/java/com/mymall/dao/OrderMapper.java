@@ -1,6 +1,7 @@
 package com.mymall.dao;
 
 import com.mymall.pojo.Order;
+import org.apache.ibatis.annotations.Param;
 
 public interface OrderMapper {
     int deleteByPrimaryKey(Integer id);
@@ -14,4 +15,9 @@ public interface OrderMapper {
     int updateByPrimaryKeySelective(Order record);
 
     int updateByPrimaryKey(Order record);
+
+    //根据用户和订单id查看订单是否生成
+    Order selectOrderById(@Param("userId")Integer userId,@Param("orderNo")Long orderNo);
+    //根据订单号查看订单是否存在
+    Order selectOrderByOrderId(long orderNo);
 }

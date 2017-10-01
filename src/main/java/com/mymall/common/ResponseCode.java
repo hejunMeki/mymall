@@ -10,7 +10,9 @@ public enum ResponseCode {
     //有错误
     ERROR(1,"ERROR"),
     //非法的行为
-    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARGUMENT");
+    ILLEGAL_ARGUMENT(2,"ILLEGAL_ARGUMENT"),
+    //需要登录
+    NEED_LOGIN(10,"NEED_LOGIN");
     //状态码  只有小于等于0才是正常
     private final int code;
     //消息码对应的反馈消息

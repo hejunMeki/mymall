@@ -1,0 +1,10 @@
+//将字符串分割并存放在集合中
+        List<String> productList = Splitter.on(",").splitToList(productIds);
+
+防止查询是空
+<select id="selectProductCount" parameterType="Integer" resultType="int">
+    select IFNULL(sum(quantity),0) as count
+    from mmall_cart
+    where user_id=#{userId}
+  </select>
+地址相关操作横向越权很多  需要与id绑定操作
