@@ -210,10 +210,24 @@
   </select>
 
 
-  <!---->
+  <!--根据订单号查找订单-->
   <select id="selectOrderByOrderId" parameterType="long" resultMap="BaseResultMap">
     select <include refid="Base_Column_List"/>
     from mmall_order
     where order_no=#{orderNo}
   </select>
+
+  <!--根据用户id查看所有订单的集合-->
+  <select id="selectOrdersByUserId" parameterType="Integer" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    FROM mmall_order
+    where user_id=#{userId}
+  </select>
+  <!--查询所有order列表 按照时间降序排列-->
+  <select id="selectAll" resultMap="BaseResultMap">
+    select <include refid="Base_Column_List"/>
+    from mmall_order
+    order by create_time DESC
+  </select>
 </mapper>
+

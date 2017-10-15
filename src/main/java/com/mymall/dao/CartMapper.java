@@ -30,4 +30,6 @@ public interface CartMapper {
     int checkedOrUncheckedProduct(@Param("userId") Integer userId, @Param("productId") Integer productId,@Param("check") Integer check);
     //查看购物车中产品数量 包括未选中的
     int selectProductCount(Integer userId);
+    //根据用户id查找用户勾选的购物车列表
+    List<Cart> getCartListByUserId(Integer userId);
 }

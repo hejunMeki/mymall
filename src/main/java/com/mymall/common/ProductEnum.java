@@ -30,4 +30,41 @@ public enum ProductEnum {
         int CHECKED = 1;//即购物车选中状态
         int UN_CHECKED = 0;//购物车中未选中状态
     }
+    public enum PaymentType{
+        PAY_ONLINE(1,"在线支付");
+        int code;
+        String value;
+
+        PaymentType(int code, String value) {
+            this.code = code;
+            this.value = value;
+        }
+
+        public int getCode() {
+            return code;
+        }
+
+        public void setCode(int code) {
+            this.code = code;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+
+        //根据code获取values
+        public static String getValue(int code)
+        {
+            for (PaymentType paymentType:
+                    values() ) {
+                if(paymentType.getCode()==code)
+                    return paymentType.getValue();
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
+    }
 }

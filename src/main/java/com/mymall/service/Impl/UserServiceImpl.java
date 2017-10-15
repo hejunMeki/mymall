@@ -6,6 +6,9 @@ import com.mymall.common.TokenCache;
 import com.mymall.dao.UserMapper;
 import com.mymall.pojo.User;
 import com.mymall.service.IUserService;
+import com.mymall.util.DateTimeUtil;
+import com.mymall.util.MD5Util;
+import com.mymall.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.core.jmx.Server;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,33 +20,54 @@ import java.util.UUID;
 
 /**
  * Created by Administrator on 2017/9/14 0014.
- * Description:...
+ * Description:用户业务层
  */
 @Service("iUserService")
 public class UserServiceImpl implements IUserService {
 
     @Autowired
     private UserMapper userMapper;
-
+    /*
+        用户登录检查
+     */
     public ServerResponse<User> login(String username, String password) {
         //检查用户名是否存在
         int count = userMapper.checkUsername(username);
         if (count == 0) {
             return ServerResponse.createErrorByMessage("用户名不存在");
         }
-        //todo MD5加密
+        //todo MD5加密  已修改
+        String md5Password= MD5Util.MD5EncodeUtf8(password);
         //检查用户名和密码是否正确
-        User user = userMapper.login(username, password);
+        User user = userMapper.login(username, md5Password);
         if (user == null) {
             return ServerResponse.createErrorByMessage("密码错误");
         }
-        //用户登录成功  处理返回值的密码
-        user.setPassword(StringUtils.EMPTY);
+        //用户登录成功  处理返回值的密码   这样不会返回password字段
+        user.setPassword(null);
+       // UserVo userVo=accessUserToUserVo(user);
         //登录成功  返回user
         return ServerResponse.createSuccess("登录成功", user);
     }
+    /*
+    将user的属性封装到uservo给前端显示
+     */
+//    private UserVo accessUserToUserVo(User user)
+//    {
+//        UserVo userVo=new UserVo();
+//        userVo.setId(user.getId());
+//        userVo.setUsername(user.getUsername());
+//        userVo.setPhone(user.getPhone());
+//        userVo.setEmail(user.getEmail());
+//        userVo.setRole(user.getRole());
+//        userVo.setCreateTime(DateTimeUtil.parseDateToStr(user.getCreateTime()));
+//        userVo.setUpdateTime(DateTimeUtil.parseDateToStr(user.getUpdateTime()));
+//        return userVo;
+//    }
 
-    @Override
+    /*
+        用户注册
+     */
     public ServerResponse<String> register(User user) {
         //检查用户名是否存在
         ServerResponse validResponse=this.check_valid(user.getUsername(),Const.USERNAME);
@@ -52,10 +76,13 @@ public class UserServiceImpl implements IUserService {
         validResponse=this.check_valid(user.getEmail(),Const.EMAIL);
         if(!validResponse.isSuccess())
             return validResponse;
-        //用户名和邮箱都不存在
+        //用户名和邮箱都不存在 可以插入
         //设置用户的权限为customer
         user.setRole(Const.Role.ROLE_CUSTOMER);
-        //开始插入  todo md5加密
+        //todo md5加密  已修改
+        String md5Password= MD5Util.MD5EncodeUtf8(user.getPassword());
+        user.setPassword(md5Password);
+        //开始插入
         int result=userMapper.insert(user);
         if(result==0)
             return ServerResponse.createErrorByMessage("用户注册失败！");
@@ -64,6 +91,7 @@ public class UserServiceImpl implements IUserService {
 
     /*
         根据类型判断是否存在
+        既可以判断用户名也可以判断邮箱
      */
     public ServerResponse<String> check_valid(String str, String type) {
         //类型不为空
@@ -113,7 +141,7 @@ public class UserServiceImpl implements IUserService {
         return ServerResponse.createErrorByMessage("密码错误");
     }
     /*
-        未登录修改密码
+        未登录修改密码   根据用户名修改
      */
     public ServerResponse<String> resetPassword(String username,String newPassword,String forgetToken)
     {
@@ -137,7 +165,8 @@ public class UserServiceImpl implements IUserService {
         if(StringUtils.equals(forgetToken,tokenVlaue))
         {
             //todo MD5加密
-            int count=userMapper.updatePassword(username,newPassword);
+            String md5NewPassword= MD5Util.MD5EncodeUtf8(newPassword);
+            int count=userMapper.updatePassword(username,md5NewPassword);
             if(count>0)
                 return ServerResponse.createBySuccessMessage("密码修改成功");
         }
@@ -151,23 +180,28 @@ public class UserServiceImpl implements IUserService {
      */
     public ServerResponse<String> ChangePassword(User user,String passwordOld,String passwordNew)
     {
-            //防止横向越权  将passwordOld与用户的id绑定查询
-        int count=userMapper.checkPassword(user.getId(),passwordOld);
+        //防止横向越权  将passwordOld与用户的id绑定查询
+        //todo 已修改
+        String md5OldPassowrd=MD5Util.MD5EncodeUtf8(passwordOld);
+        int count=userMapper.checkPassword(user.getId(),md5OldPassowrd);
         if(count==0)
             return ServerResponse.createErrorByMessage("旧密码错误");
         //todo MD5加密
-        user.setPassword(passwordNew);
+        String md5NewPassowrd=MD5Util.MD5EncodeUtf8(passwordNew);
+        user.setPassword(md5NewPassowrd);
         //选择性更新
        int resultCount=userMapper.updateByPrimaryKeySelective(user);
        if(resultCount>0)
            return ServerResponse.createBySuccessMessage("密码修改成功");
        return ServerResponse.createErrorByMessage("密码修改失败");
     }
-
+    /*
+        登录状态修改用户信息
+     */
     public ServerResponse<User> changeUserMessage(User user)
     {
         //用户名不能被修改
-        //邮箱不能喝别人的重复
+        //邮箱不能和别人的重复
        int resultCount= userMapper.checkEmail(user.getId(),user.getEmail());
        if(resultCount>0)
            return ServerResponse.createErrorByMessage("邮箱已被注册");
@@ -196,7 +230,7 @@ public class UserServiceImpl implements IUserService {
         if(currentUser==null)
             ServerResponse.createByErrorCodeMessage(10,"用户未登录");
         //将密码设置空
-        currentUser.setPhone(StringUtils.EMPTY);
+        currentUser.setPassword(null);
         return ServerResponse.createSuccess("查询成功",currentUser);
     }
 

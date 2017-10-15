@@ -37,6 +37,17 @@ public enum OrderEnum {
         public void setValue(String value) {
             this.value = value;
         }
+
+        //根据order的code获取values
+        public static String getValue(int code)
+        {
+            for (OrderStatusEnum orderStatusEnum:
+                values() ) {
+                if(orderStatusEnum.getCode()==code)
+                    return orderStatusEnum.getValue();
+            }
+            throw new RuntimeException("没有找到对应的枚举");
+        }
     }
     //对应支付宝回调的订单状态
     public interface AlipayCallback{

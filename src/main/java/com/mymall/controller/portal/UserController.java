@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 public class UserController {
     @Autowired
     private IUserService iUserService;
-    @RequestMapping(value = "login",method = RequestMethod.POST)
+    @RequestMapping(value = "login")  //,method = RequestMethod.POST
     @ResponseBody                //自动转为json
     public ServerResponse<User> login(String username, String password, HttpSession session)
     {
@@ -38,7 +38,7 @@ public class UserController {
     /*
         register注册操作
      */
-    @RequestMapping(value = "register",method = RequestMethod.POST)
+    @RequestMapping(value = "register")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<String> register(User user)
     {
@@ -58,7 +58,7 @@ public class UserController {
         获取用户登录信息
         如果登录直接从session中取
      */
-    @RequestMapping(value = "get_user_info",method = RequestMethod.POST)
+    @RequestMapping(value = "get_user_info")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<User> getUserInfo(HttpSession session)
     {
@@ -71,7 +71,7 @@ public class UserController {
     /*
         忘记密码的问题
      */
-    @RequestMapping(value = "forget_get_question",method = RequestMethod.POST)
+    @RequestMapping(value = "forget_get_question")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<String> forgetGetQuestion(String username)
     {
@@ -83,7 +83,7 @@ public class UserController {
     /*
         检查密保的答案是否正确
      */
-    @RequestMapping(value = "forget_check_answer",method = RequestMethod.POST)
+    @RequestMapping(value = "forget_check_answer")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<String> forgetCheckAnswer(String username,String question,String answer)
     {
@@ -92,7 +92,7 @@ public class UserController {
     /*
         未登录修改密码
      */
-    @RequestMapping(value = "forget_reset_password",method = RequestMethod.POST)
+    @RequestMapping(value = "forget_reset_password")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<String> forgetResetPassword(String username,String newPassword,String forgetToken)
     {
@@ -102,7 +102,7 @@ public class UserController {
     /*
         登录状态修改密码
      */
-    @RequestMapping(value = "reset_password",method = RequestMethod.POST)
+    @RequestMapping(value = "reset_password")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<String> resetPassword(HttpSession session,String passwordOld,String passwordNew)
     {
@@ -113,7 +113,7 @@ public class UserController {
         return iUserService.ChangePassword(user,passwordOld,passwordNew);
     }
     //todo 时间等信息不对
-    @RequestMapping(value = "update_information",method = RequestMethod.POST)
+    @RequestMapping(value = "update_information")//,method = RequestMethod.POST
     @ResponseBody
     public ServerResponse<User> updateInformation(HttpSession session,User user)
     {
@@ -137,7 +137,7 @@ public class UserController {
 
 
 
-    @RequestMapping(value = "get_information",method = RequestMethod.POST)
+    @RequestMapping(value = "get_information")//
     @ResponseBody
     public ServerResponse<User> getInformation(HttpSession session)
     {

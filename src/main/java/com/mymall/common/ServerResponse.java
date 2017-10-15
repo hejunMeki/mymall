@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by Administrator on 2017/9/14 0014.
- * Description:消息返回的一个封装类
+ * Description:消息返回的一个封装类 指定以json格式返回
  * 服务端响应对象
  */
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)   //空的key不打包成json返回

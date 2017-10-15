@@ -90,7 +90,7 @@ public class ShippingServiceImpl implements IShippingService{
         Shipping shipping=shippingMapper.selectShippingById(userId,shippingId);
         if(shipping!=null)
         {
-            return ServerResponse.createSuccess("更新地址成功",shipping);
+            return ServerResponse.createSuccess("查询地址成功",shipping);
         }
         return ServerResponse.createErrorByMessage("地址不存在");
     }

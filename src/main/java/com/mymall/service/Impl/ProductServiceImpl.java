@@ -233,12 +233,13 @@ public class ProductServiceImpl implements IProductService{
             //category不为空  查询所有该分类下子孙节点
             categoryIdList=iCategoryService.selectCategoryAndChildrenById(categoryId).getData();
         }
+        //sql语句为 like %iPhone%  匹配
         if(StringUtils.isNotBlank(keyword)){
             keyword = new StringBuilder().append("%").append(keyword).append("%").toString();
         }
         //开始设置排序什么的
         PageHelper.startPage(pageNum,pageSize);
-        //orderBy的规则是排序字段民_排序方法
+        //orderBy的规则是排序字段名_排序方法   price_desc price_asc  目前仅支持对价格排序
         if(StringUtils.isNotBlank(orderBy)){
             if(ProductEnum.ProductListOrderBy.PRICE_ASC_DESC.contains(orderBy)){
                 String[] orderByArray = orderBy.split("_");
